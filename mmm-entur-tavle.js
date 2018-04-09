@@ -7,6 +7,7 @@ Module.register('MMM-Entur-tavle', {
         stopType: "stopPlace", // stopPlace or quay
         numResults: 5
     },
+    
 
     getScripts: function(){
         return [ "moment.js" ];
