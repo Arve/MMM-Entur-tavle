@@ -1,11 +1,11 @@
 # MMM-EnTur-tavle
 
 
-<img src="/images/screenshot.png" align="right"> This is a departure board made for [MagicMirror^2](https://magicmirror.builders/) using the [EnTur API](https://www.entur.org/dev/api/).  The board can show the next departures for all public transport in Norway including any mode of transportation.
+<img src="/images/screenshot.png" align="right"> This is a departure board made for [MagicMirror²](https://magicmirror.builders/) using the [Entur API](https://www.entur.org/dev/api/).  The board can show the next departures for all public transport in Norway including any mode of transportation.
 
 ## Installation
 
-Enter your MagicMirror^2 module folder, e.g.:
+Enter your MagicMirror² module folder, e.g.:
 
     cd ~/MagicMirror/modules
 
@@ -58,8 +58,7 @@ Replace the numeric part of the stopPlace ID ( `NSR:StopPlace:56338` ) with your
 
 ## Multiple instances
 
-This plugin fully supports multiple instances.  If you wish to display different platforms separately, use the stopType configuration option above with separate quays.
-
+This plugin fully supports multiple instances on the same MagicMirror² instance.  If you wish to display different platforms separately, use the stopType configuration option with separate quays as suggested above.
 
 ## Dislaimer
 
