@@ -1,22 +1,36 @@
-Module.register('MMM-avgangstavle', {
+Module.register('MMM-Entur-tavle', {
 
     defaults: {
-        ETapiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql"
-        ETClientName: "MMM-avgangstavle-dev",
+        ETapiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql",
+        ETClientName: "MMM-Entur-tavle-dev",
         stopId: "12345",
+        stopType: "stopPlace", // stopPlace or quay
+        numResults: 5
     },
 
     getScripts: function(){
-        return [ "moment.js" ]
-    }
+        return [ "moment.js" ];
+    },
 
-    prepareQuery: function(iso_date, stop_id){
-        // TODO: Allow for quays
+    prepareQuery: function(iso_date){
+
+        if (!iso_date) {
+            let start_time = `startTime: "${iso_date}", `;
+        } else {
+            let start_time = '';
+        }
+
+        if (config.stopType === "stopPlace"){
+            let query_init = `stopPlace(id: "NSR:StopPlace:${stop_id}") {`;
+        } else if (config.stopType === "quay"){
+            let query_init = `stopPlace(id: "NSR:StopPlace:${stop_id}") {`;
+        } 
+
         return `{
-          stopPlace(id: "NSR:StopPlace:${stop_id}") {
+            ${query_init}
             id
             name
-            estimatedCalls(startTime: "${iso_date}", timeRange: 72100, numberOfDepartures: 10) {
+            estimatedCalls(${start_time} timeRange: 72100, numberOfDepartures: ${config.numResults}) {
               aimedDepartureTime
               expectedDepartureTime
               actualDepartureTime
