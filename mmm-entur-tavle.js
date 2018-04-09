@@ -1,11 +1,11 @@
 Module.register('MMM-Entur-tavle', {
-
     defaults: {
-        ETapiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql",
+        ETApiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql",
         ETClientName: "MMM-Entur-tavle-dev",
         stopId: "12345",
-        stopType: "stopPlace", // stopPlace or quay
-        numResults: 5
+        stopType: "StopPlace", // StopPlace or Quay - case sensitive. 
+        numResults: 5,
+        showHeader: true
     },
     
 
@@ -13,29 +13,98 @@ Module.register('MMM-Entur-tavle', {
         return [ "moment.js" ];
     },
 
-    prepareQuery: function(iso_date){
+    start: function(){
+        var self = this;
+        this.full_id = `NSR:${this.config.stopType}:${this.config.stopId}`;
+        this.journeys = [];
+        this.getDepartures();
+        setInterval( function(){
+            self.getDepartures();
+        }, 30000)
+    },
 
-        if (!iso_date) {
-            let start_time = `startTime: "${iso_date}", `;
-        } else {
-            let start_time = '';
+    getDepartures: function(){
+        const payload = {
+            url: this.config.ETApiUrl,
+            ETClientName: this.config.ETClientName,
+            query: {
+                query: this.prepareQueryString()
+            }
+        };
+        this.sendSocketNotification("GET_DEPARTURES", payload)
+    },
+
+    getCell: function(cell_text, class_name) {
+        let cell = document.createElement('td');
+        if (!!class_name) {
+            cell.className = class_name;
         }
+        cell.innerHTML = cell_text;
+        return cell;
+    },
 
-        if (config.stopType === "stopPlace"){
-            let query_init = `stopPlace(id: "NSR:StopPlace:${stop_id}") {`;
-        } else if (config.stopType === "quay"){
-            let query_init = `stopPlace(id: "NSR:StopPlace:${stop_id}") {`;
+    getDom: function(){
+        let wrapper = document.createElement('div');
+        wrapper.className = "align-left light bright"
+        if (this.journeys.length > 0){
+            let table = document.createElement('table')
+            if (this.config.showHeader){
+                let hrow = document.createElement('div');
+                hrow.className = 'light small align-right'
+                hrow.innerHTML = this.quayName;
+                wrapper.appendChild(hrow)
+            }
+            for (const journey of this.journeys){
+                let row = document.createElement('tr');
+                row.className = 'small'
+                if (this.config.highlightRealtime && journey.realtime === true) row.className += ' normal'
+                row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, 'align-left'));
+                row.appendChild(this.getCell('&nbsp;'));
+                row.appendChild(this.getCell(journey.destinationDisplay.frontText)); 
+                row.appendChild(this.getCell('&nbsp;'));
+                row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), 'align-right')); 
+                table.appendChild(row)
+            }
+            wrapper.appendChild(table)
+        } else {
+            wrapper.innerHTML = this.translate("LOADING");
+        }
+        return wrapper;
+    },
+
+    socketNotificationReceived: function(message, payload){
+        if ((message === "DEPARTURE_LIST") && (payload.id === this.full_id)){
+            this.quayName = payload.name;
+            this.journeys = payload.estimatedCalls;
+            this.updateDom(250);
+        }
+    },
+
+
+
+
+    prepareQueryString: function(iso_date){
+        let start_time = '';
+        let query_init = '';
+        if (iso_date) {
+            let start_time = `startTime: "${iso_date}", `;
+        };
+
+        if (this.config.stopType === "StopPlace"){
+            query_init = `stopPlace(id: "${this.full_id}")`;
+        } else if (this.config.stopType === "quay"){
+            query_init = `quay(id: "${this.full_id}")`;
         } 
-
-        return `{
-            ${query_init}
+         return `{
+            ${query_init} {
             id
             name
-            estimatedCalls(${start_time} timeRange: 72100, numberOfDepartures: ${config.numResults}) {
+            estimatedCalls(${start_time} timeRange: 72100, numberOfDepartures: ${this.config.numResults}) {
               aimedDepartureTime
               expectedDepartureTime
               actualDepartureTime
               realtime
+              realtimeState
               forBoarding
               destinationDisplay {
                 frontText
@@ -52,7 +121,7 @@ Module.register('MMM-Entur-tavle', {
               }
             }
           }
-        }`;
+        }`; 
     },
 
     getTimeString: function(query_time, departure_time){
@@ -68,8 +137,5 @@ Module.register('MMM-Entur-tavle', {
             return moment(departure_time).local().format("HH:mm")
         }
     },
-
-
-
 
 });
