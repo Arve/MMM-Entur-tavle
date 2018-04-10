@@ -91,8 +91,8 @@ Module.register('MMM-Entur-tavle', {
 
         if (this.config.stopType === "StopPlace"){
             query_init = `stopPlace(id: "${this.full_id}")`;
-        } else if (this.config.stopType === "quay"){
-            query_init = `quay(id: "${this.full_id}")`;
+        } else if (this.config.stopType === "Quay"){
+            query_init = `quay (id: "${this.full_id}")`;
         } 
          return `{
             ${query_init} {
