@@ -40,7 +40,7 @@ Currently available configuration options are as follows:
 | highlightRealtime | Boolean.  If set to `true`, departures that are updated with realtime info will be slightly bolded. | false |
 | updateSpeed | Integer.  The transition speed when updating the display | 1000 |
 | size | String.  One of "xsmall", "small", "medium", "large" or "xlarge" | "medium" |
-
+| refresh | Integer.  Seconds between board refresh | 30 |
 
 ## Finding stopPlace
 

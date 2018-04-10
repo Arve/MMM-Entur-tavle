@@ -8,7 +8,8 @@ Module.register('MMM-Entur-tavle', {
         highlightRealtime: false,
         showHeader: true,
         updateSpeed: 1000,
-        size: 'medium'
+        size: 'medium',
+        refresh: 30
     },
     
     getScripts: function(){
@@ -22,7 +23,7 @@ Module.register('MMM-Entur-tavle', {
         this.getDepartures();
         setInterval( function(){
             self.getDepartures();
-        }, 30000)
+        }, this.config.refresh*1000)
     },
 
     getDepartures: function(){
@@ -77,7 +78,7 @@ Module.register('MMM-Entur-tavle', {
         if ((message === "DEPARTURE_LIST") && (payload.id === this.full_id)){
             this.quayName = payload.name;
             this.journeys = payload.estimatedCalls;
-            this.updateDom(this.config.animationSpeed);
+            this.updateDom(this.config.updateSpeed);
         }
     },
 
