@@ -6,7 +6,9 @@ Module.register('MMM-Entur-tavle', {
         stopType: "StopPlace", // StopPlace or Quay - case sensitive. 
         numResults: 5,
         highlightRealtime: false,
-        showHeader: true
+        showHeader: true,
+        updateSpeed: 1000,
+        size: 'medium'
     },
     
     getScripts: function(){
@@ -45,7 +47,7 @@ Module.register('MMM-Entur-tavle', {
 
     getDom: function(){
         let wrapper = document.createElement('div');
-        wrapper.className = "align-left light bright"
+        wrapper.className = "align-left light bright "+this.config.size;
         if (this.journeys.length > 0){
             let table = document.createElement('table')
             if (this.config.showHeader){
@@ -56,7 +58,6 @@ Module.register('MMM-Entur-tavle', {
             }
             for (const journey of this.journeys){
                 let row = document.createElement('tr');
-                row.className = 'small'
                 if (this.config.highlightRealtime && journey.realtime === true) row.className += ' regular'
                 row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, 'align-left'));
                 row.appendChild(this.getCell('&nbsp;'));
@@ -76,7 +77,7 @@ Module.register('MMM-Entur-tavle', {
         if ((message === "DEPARTURE_LIST") && (payload.id === this.full_id)){
             this.quayName = payload.name;
             this.journeys = payload.estimatedCalls;
-            this.updateDom(250);
+            this.updateDom(this.config.animationSpeed);
         }
     },
 
