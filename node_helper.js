@@ -63,7 +63,7 @@ module.exports = NodeHelper.create({
                 headers: {
                     "ETClientName": payload.ETClientName
                 },
-                json: this.prepareQuery(payload);
+                json: this.prepareQuery(payload),
             };
             var self = this;
             request.post(options, function(error, response, message){

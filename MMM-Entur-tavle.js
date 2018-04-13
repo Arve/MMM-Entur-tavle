@@ -5,7 +5,7 @@ Module.register('MMM-Entur-tavle', {
         stopId: "12345",
         stopType: "StopPlace", // StopPlace or Quay - case sensitive. 
         numResults: 5,
-        authorityId: "NSR":
+        authorityId: "NSR",
         highlightRealtime: false,
         showHeader: true,
         updateSpeed: 1000,
