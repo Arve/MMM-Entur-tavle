@@ -3,14 +3,12 @@ let request = require('request');
 
 module.exports = NodeHelper.create({
 
-
-
     start: function(){
         console.log("Starting node helper for: " + this.name);
     },
 
     getFullId: function(id, type, authority){
-        return `${authority}:${stopType}:${id}`
+        return `${authority}:${type}:${id}`;
     },
 
     prepareQuery: function(data){
