@@ -5,6 +5,7 @@ Module.register('MMM-Entur-tavle', {
         stopId: "12345",
         stopType: "StopPlace", // StopPlace or Quay - case sensitive. 
         numResults: 5,
+        authorityId: "NSR":
         highlightRealtime: false,
         showHeader: true,
         updateSpeed: 1000,
@@ -30,9 +31,9 @@ Module.register('MMM-Entur-tavle', {
         const payload = {
             url: this.config.ETApiUrl,
             ETClientName: this.config.ETClientName,
-            query: {
-                query: this.prepareQueryString()
-            }
+            id: this.config.stopId,
+            stopType: this.config.stopType,
+            authorityId: this.config.authorityId,
         };
         this.sendSocketNotification("GET_DEPARTURES", payload)
     },
@@ -65,7 +66,7 @@ Module.register('MMM-Entur-tavle', {
                 row.appendChild(this.getCell(journey.destinationDisplay.frontText)); 
                 row.appendChild(this.getCell('&nbsp;'));
                 row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), 'align-right')); 
-                table.appendChild(row)
+                table.appendChild(row);
             }
             wrapper.appendChild(table)
         } else {
