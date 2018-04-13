@@ -28,7 +28,7 @@ module.exports = NodeHelper.create({
                 ${query_init} {
                 id
                 name
-                estimatedCalls(${start_time} timeRange: 72100, numberOfDepartures: ${this.config.numResults}) {
+                estimatedCalls(${start_time} timeRange: 72100, numberOfDepartures: ${data.numResults}) {
                   aimedDepartureTime
                   expectedDepartureTime
                   actualDepartureTime

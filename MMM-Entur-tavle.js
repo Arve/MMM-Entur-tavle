@@ -34,6 +34,7 @@ Module.register('MMM-Entur-tavle', {
             id: this.config.stopId,
             stopType: this.config.stopType,
             authorityId: this.config.authorityId,
+            numResults: this.config.numResults
         };
         this.sendSocketNotification("GET_DEPARTURES", payload)
     },
