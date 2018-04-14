@@ -1,6 +1,5 @@
 # MMM-Entur-tavle
 
-
 <img src="./images/screenshot.png" align="right"> This is a departure board made for [MagicMirror²](https://magicmirror.builders/) using the [Entur API](https://www.entur.org/dev/api/).  The board can show the next departures for all public transport in Norway including any mode of transportation.
 
 ## Installation
@@ -64,7 +63,7 @@ Replace the numeric part of the stopPlace ID ( `NSR:StopPlace:56338` ) with your
     },
     "destinationDisplay": {
         "frontText": "Vestli via Majorstuen"
-    },    
+    },
 
 … look for the quay number that corresponds to the frontText of the quay/platform you wish to display travels from.
 
@@ -74,7 +73,7 @@ This plugin fully supports multiple instances on the same MagicMirror² instance
 
 ## Disclaimer
 
-This module fetches data licensed under the [Norwegian License for open Government Data (NLOD)](https://data.norge.no/nlod/en) delivered by [Entur](https://www.entur.org/), but the application/module itself is not developed, maintained or endorsed by Entur.  
+This module fetches data licensed under the [Norwegian License for open Government Data (NLOD)](https://data.norge.no/nlod/en) delivered by [Entur](https://www.entur.org/), but the application/module itself is not developed, maintained or endorsed by Entur.
 
 ## Planned features
 

@@ -7,6 +7,51 @@ module.exports = NodeHelper.create({
         console.log("Starting node helper for: " + this.name);
     },
 
+    getFullId: function(id, type, authority){
+        return `${authority}:${type}:${id}`;
+    },
+
+    prepareQuery: function(data){
+        let startTime = '';
+        let queryInit = '';
+        const fullId = this.getFullId(data.id, data.stopType, data.authorityId);
+        if (data.startDate) {
+            let startTime = `startTime: "${data.startTime}", `;
+        };
+
+        if (data.stopType === "StopPlace"){
+            queryInit = `stopPlace(id: "${fullId}")`;
+        } else if (data.stopType === "Quay"){
+            queryInit = `quay (id: "${fullId}")`;
+        };
+        return `{
+                ${queryInit} {
+                id
+                name
+                estimatedCalls(${startTime} timeRange: 72100, numberOfDepartures: ${data.numResults}) {
+                  aimedDepartureTime
+                  expectedDepartureTime
+                  actualDepartureTime
+                  realtime
+                  realtimeState
+                  forBoarding
+                  destinationDisplay {
+                    frontText
+                  }
+                  serviceJourney {
+                    journeyPattern {
+                      line {
+                        id
+                        name
+                        transportMode
+                        publicCode
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+    },
 
     socketNotificationReceived: function(message, payload){
         if (message === "GET_DEPARTURES"){
@@ -16,7 +61,7 @@ module.exports = NodeHelper.create({
                 headers: {
                     "ETClientName": payload.ETClientName
                 },
-                json: payload.query
+                json:{ query: this.prepareQuery(payload) },
             };
             var self = this;
             request.post(options, function(error, response, message){
