@@ -34,10 +34,7 @@ Module.register('MMM-Entur-tavle', {
             id: this.config.stopId,
             stopType: this.config.stopType,
             authorityId: this.config.authorityId,
-            numResults: this.config.numResults,
-            query: {
-                query: this.prepareQueryString()
-            }
+            numResults: this.config.numResults
         };
         this.sendSocketNotification("GET_DEPARTURES", payload)
     },
@@ -86,7 +83,6 @@ Module.register('MMM-Entur-tavle', {
             this.updateDom(this.config.updateSpeed);
         }
     },
-
 
     getTimeString: function(queryTime, departureTime){
         let diffSeconds = moment(departureTime).diff(queryTime, 'seconds')
