@@ -12,23 +12,23 @@ module.exports = NodeHelper.create({
     },
 
     prepareQuery: function(data){
-            let start_time = '';
-            let query_init = '';
-            const full_id = this.getFullId(data.id, data.stopType, data.authorityId);
-            if (data.startDate) {
-                let start_time = `startTime: "${data.start_time}", `;
-            };
-    
-            if (data.stopType === "StopPlace"){
-                query_init = `stopPlace(id: "${full_id}")`;
-            } else if (data.stopType === "Quay"){
-                query_init = `quay (id: "${full_id}")`;
-            }; 
-             return `{
-                ${query_init} {
+        let startTime = '';
+        let queryInit = '';
+        const fullId = this.getFullId(data.id, data.stopType, data.authorityId);
+        if (data.startDate) {
+            let startTime = `startTime: "${data.startTime}", `;
+        };
+
+        if (data.stopType === "StopPlace"){
+            queryInit = `stopPlace(id: "${fullId}")`;
+        } else if (data.stopType === "Quay"){
+            queryInit = `quay (id: "${fullId}")`;
+        };
+        return `{
+                ${queryInit} {
                 id
                 name
-                estimatedCalls(${start_time} timeRange: 72100, numberOfDepartures: ${data.numResults}) {
+                estimatedCalls(${startTime} timeRange: 72100, numberOfDepartures: ${data.numResults}) {
                   aimedDepartureTime
                   expectedDepartureTime
                   actualDepartureTime
@@ -50,7 +50,7 @@ module.exports = NodeHelper.create({
                   }
                 }
               }
-            }`; 
+            }`;
     },
 
     socketNotificationReceived: function(message, payload){

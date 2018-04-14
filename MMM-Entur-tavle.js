@@ -3,7 +3,7 @@ Module.register('MMM-Entur-tavle', {
         ETApiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql",
         ETClientName: "MMM-Entur-tavle",
         stopId: "12345",
-        stopType: "StopPlace", // StopPlace or Quay - case sensitive. 
+        stopType: "StopPlace", // StopPlace or Quay - case sensitive.
         numResults: 5,
         authorityId: "NSR",
         highlightRealtime: false,
@@ -12,7 +12,7 @@ Module.register('MMM-Entur-tavle', {
         size: 'medium',
         refresh: 30
     },
-    
+
     getScripts: function(){
         return [ "moment.js" ];
     },
@@ -39,12 +39,12 @@ Module.register('MMM-Entur-tavle', {
         this.sendSocketNotification("GET_DEPARTURES", payload)
     },
 
-    getCell: function(cell_text, class_name) {
+    getCell: function(cellText, className) {
         let cell = document.createElement('td');
-        if (!!class_name) {
-            cell.className = class_name;
+        if (!!className) {
+            cell.className = className;
         }
-        cell.innerHTML = cell_text;
+        cell.innerHTML = cellText;
         return cell;
     },
 
@@ -61,12 +61,12 @@ Module.register('MMM-Entur-tavle', {
             }
             for (const journey of this.journeys){
                 let row = document.createElement('tr');
-                if (this.config.highlightRealtime && journey.realtime === true) row.className += ' regular'
+                if (this.config.highlightRealtime && journey.realtime === true) {row.className += ' regular'}
                 row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, 'align-left'));
                 row.appendChild(this.getCell('&nbsp;'));
-                row.appendChild(this.getCell(journey.destinationDisplay.frontText)); 
+                row.appendChild(this.getCell(journey.destinationDisplay.frontText));
                 row.appendChild(this.getCell('&nbsp;'));
-                row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), 'align-right')); 
+                row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), 'align-right'));
                 table.appendChild(row);
             }
             wrapper.appendChild(table)
@@ -84,58 +84,17 @@ Module.register('MMM-Entur-tavle', {
         }
     },
 
-    prepareQueryString: function(iso_date){
-        let start_time = '';
-        let query_init = '';
-        if (iso_date) {
-            let start_time = `startTime: "${iso_date}", `;
-        };
-
-        if (this.config.stopType === "StopPlace"){
-            query_init = `stopPlace(id: "${this.full_id}")`;
-        } else if (this.config.stopType === "Quay"){
-            query_init = `quay (id: "${this.full_id}")`;
-        } 
-         return `{
-            ${query_init} {
-            id
-            name
-            estimatedCalls(${start_time} timeRange: 72100, numberOfDepartures: ${this.config.numResults}) {
-              aimedDepartureTime
-              expectedDepartureTime
-              actualDepartureTime
-              realtime
-              realtimeState
-              forBoarding
-              destinationDisplay {
-                frontText
-              }
-              serviceJourney {
-                journeyPattern {
-                  line {
-                    id
-                    name
-                    transportMode
-                    publicCode
-                  }
-                }
-              }
-            }
-          }
-        }`; 
-    },
-
-    getTimeString: function(query_time, departure_time){
-        let diff_seconds = moment(departure_time).diff(query_time, 'seconds')
-        let diff_minutes = moment(departure_time).diff(query_time, 'minutes')
-        if (diff_seconds < 0) {
+    getTimeString: function(queryTime, departureTime){
+        let diffSeconds = moment(departureTime).diff(queryTime, 'seconds')
+        let diffMinutes = moment(departureTime).diff(queryTime, 'minutes')
+        if (diffSeconds < 0) {
             return "Gått";
-        } else if (diff_seconds < 60){
+        } else if (diffSeconds < 60){
             return "Nå";
-        } else if (diff_seconds < 600){
-            return diff_minutes+' min';
+        } else if (diffSeconds < 600){
+            return diffMinutes+' min';
         } else {
-            return moment(departure_time).local().format("HH:mm")
+            return moment(departureTime).local().format("HH:mm")
         }
     },
 });
