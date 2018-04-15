@@ -1,4 +1,4 @@
-Module.register('MMM-Entur-tavle', {
+Module.register("MMM-Entur-tavle", {
     defaults: {
         ETApiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql",
         ETClientName: "MMM-Entur-tavle",
@@ -9,22 +9,29 @@ Module.register('MMM-Entur-tavle', {
         highlightRealtime: false,
         showHeader: true,
         updateSpeed: 1000,
-        size: 'medium',
+        size: "medium",
         refresh: 30
     },
 
     getScripts: function(){
         return [ "moment.js" ];
     },
+    getTranslations: function() {
+        return {
+            nb: "translations/nb.json",
+            nn: "translations/nn.json",
+            en: "translations/en.json"
+        };
+    },
 
     start: function(){
         var self = this;
-        this.full_id = `NSR:${this.config.stopType}:${this.config.stopId}`;
+        this.fullId = `NSR:${this.config.stopType}:${this.config.stopId}`;
         this.journeys = [];
         this.getDepartures();
         setInterval( function(){
             self.getDepartures();
-        }, this.config.refresh*1000)
+        }, this.config.refresh*1000);
     },
 
     getDepartures: function(){
@@ -34,16 +41,13 @@ Module.register('MMM-Entur-tavle', {
             id: this.config.stopId,
             stopType: this.config.stopType,
             authorityId: this.config.authorityId,
-            numResults: this.config.numResults,
-            query: {
-                query: this.prepareQueryString()
-            }
+            numResults: this.config.numResults
         };
-        this.sendSocketNotification("GET_DEPARTURES", payload)
+        this.sendSocketNotification("GET_DEPARTURES", payload);
     },
 
     getCell: function(cellText, className) {
-        let cell = document.createElement('td');
+        let cell = document.createElement("td");
         if (!!className) {
             cell.className = className;
         }
@@ -52,27 +56,29 @@ Module.register('MMM-Entur-tavle', {
     },
 
     getDom: function(){
-        let wrapper = document.createElement('div');
-        wrapper.className = "align-left light bright "+this.config.size;
+        let wrapper = document.createElement("div");
+        wrapper.className = `align-left light bright ${this.config.size}`;
         if (this.journeys.length > 0){
-            let table = document.createElement('table')
+            let table = document.createElement("table");
             if (this.config.showHeader){
-                let hrow = document.createElement('div');
-                hrow.className = 'light small align-right'
+                let hrow = document.createElement("div");
+                hrow.className = "light small align-right";
                 hrow.innerHTML = this.quayName;
-                wrapper.appendChild(hrow)
+                wrapper.appendChild(hrow);
             }
             for (const journey of this.journeys){
-                let row = document.createElement('tr');
-                if (this.config.highlightRealtime && journey.realtime === true) {row.className += ' regular'}
-                row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, 'align-left'));
-                row.appendChild(this.getCell('&nbsp;'));
+                let row = document.createElement("tr");
+                if (this.config.highlightRealtime && journey.realtime === true) {
+                    row.className += " regular";
+                };
+                row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, "align-left"));
+                row.appendChild(this.getCell("&nbsp;"));
                 row.appendChild(this.getCell(journey.destinationDisplay.frontText));
-                row.appendChild(this.getCell('&nbsp;'));
-                row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), 'align-right'));
+                row.appendChild(this.getCell("&nbsp;"));
+                row.appendChild(this.getCell(this.getDepartureTime(moment().local().toISOString(), journey.expectedDepartureTime), "align-right"));
                 table.appendChild(row);
             }
-            wrapper.appendChild(table)
+            wrapper.appendChild(table);
         } else {
             wrapper.innerHTML = this.translate("LOADING");
         }
@@ -80,25 +86,25 @@ Module.register('MMM-Entur-tavle', {
     },
 
     socketNotificationReceived: function(message, payload){
-        if ((message === "DEPARTURE_LIST") && (payload.id === this.full_id)){
+        if ((message === "DEPARTURE_LIST") && (payload.id === this.fullId)){
             this.quayName = payload.name;
             this.journeys = payload.estimatedCalls;
             this.updateDom(this.config.updateSpeed);
         }
     },
 
-
-    getTimeString: function(queryTime, departureTime){
-        let diffSeconds = moment(departureTime).diff(queryTime, 'seconds')
-        let diffMinutes = moment(departureTime).diff(queryTime, 'minutes')
+    getDepartureTime: function(queryTime, departureTime){
+        let diffSeconds = moment(departureTime).diff(queryTime, "seconds");
+        let diffMinutes = moment(departureTime).diff(queryTime, "minutes");
         if (diffSeconds < 0) {
-            return "Gått";
+            return this.translate("departed");
         } else if (diffSeconds < 60){
-            return "Nå";
+            return this.translate("now");
         } else if (diffSeconds < 600){
-            return diffMinutes+' min';
+            let min = $this.translate("min");
+            return `${diffMinutes} ${min}`;
         } else {
-            return moment(departureTime).local().format("HH:mm")
+            return moment(departureTime).local().format("HH:mm");
         }
     },
 });
