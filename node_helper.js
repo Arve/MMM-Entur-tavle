@@ -1,5 +1,5 @@
-let NodeHelper = require('node_helper');
-let request = require('request');
+let NodeHelper = require("node_helper");
+let request = require("request");
 
 module.exports = NodeHelper.create({
 
@@ -12,8 +12,8 @@ module.exports = NodeHelper.create({
     },
 
     prepareQuery: function(data){
-        let startTime = '';
-        let queryInit = '';
+        let startTime = "";
+        let queryInit = "";
         const fullId = this.getFullId(data.id, data.stopType, data.authorityId);
         if (data.startDate) {
             let startTime = `startTime: "${data.startTime}", `;
@@ -69,7 +69,7 @@ module.exports = NodeHelper.create({
                     let path = (!!response.body.data.stopPlace)?response.body.data.stopPlace:response.body.data.quay;
                     self.sendSocketNotification("DEPARTURE_LIST", path);
                 }
-            })
+            });
 
         }
     }
