@@ -1,4 +1,4 @@
-Module.register('MMM-Entur-tavle', {
+Module.register("MMM-Entur-tavle", {
     defaults: {
         ETApiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql",
         ETClientName: "MMM-Entur-tavle",
@@ -9,7 +9,7 @@ Module.register('MMM-Entur-tavle', {
         highlightRealtime: false,
         showHeader: true,
         updateSpeed: 1000,
-        size: 'medium',
+        size: "medium",
         refresh: 30
     },
 
@@ -19,7 +19,7 @@ Module.register('MMM-Entur-tavle', {
 
     start: function(){
         var self = this;
-        this.full_id = `NSR:${this.config.stopType}:${this.config.stopId}`;
+        this.fullId = `NSR:${this.config.stopType}:${this.config.stopId}`;
         this.journeys = [];
         this.getDepartures();
         setInterval( function(){
@@ -40,7 +40,7 @@ Module.register('MMM-Entur-tavle', {
     },
 
     getCell: function(cellText, className) {
-        let cell = document.createElement('td');
+        let cell = document.createElement("td");
         if (!!className) {
             cell.className = className;
         }
@@ -49,26 +49,26 @@ Module.register('MMM-Entur-tavle', {
     },
 
     getDom: function(){
-        let wrapper = document.createElement('div');
+        let wrapper = document.createElement("div");
         wrapper.className = `align-left light bright ${this.config.size}`;
         if (this.journeys.length > 0){
-            let table = document.createElement('table');
+            let table = document.createElement("table");
             if (this.config.showHeader){
-                let hrow = document.createElement('div');
-                hrow.className = 'light small align-right';
+                let hrow = document.createElement("div");
+                hrow.className = "light small align-right";
                 hrow.innerHTML = this.quayName;
                 wrapper.appendChild(hrow);
             }
             for (const journey of this.journeys){
-                let row = document.createElement('tr');
+                let row = document.createElement("tr");
                 if (this.config.highlightRealtime && journey.realtime === true) {
-                    row.className += ' regular';
+                    row.className += " regular";
                 };
-                row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, 'align-left'));
-                row.appendChild(this.getCell('&nbsp;'));
+                row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, "align-left"));
+                row.appendChild(this.getCell("&nbsp;"));
                 row.appendChild(this.getCell(journey.destinationDisplay.frontText));
-                row.appendChild(this.getCell('&nbsp;'));
-                row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), 'align-right'));
+                row.appendChild(this.getCell("&nbsp;"));
+                row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), "align-right"));
                 table.appendChild(row);
             }
             wrapper.appendChild(table);
@@ -87,14 +87,14 @@ Module.register('MMM-Entur-tavle', {
     },
 
     getTimeString: function(queryTime, departureTime){
-        let diffSeconds = moment(departureTime).diff(queryTime, 'seconds');
-        let diffMinutes = moment(departureTime).diff(queryTime, 'minutes');
+        let diffSeconds = moment(departureTime).diff(queryTime, "seconds");
+        let diffMinutes = moment(departureTime).diff(queryTime, "minutes");
         if (diffSeconds < 0) {
             return "Gått";
         } else if (diffSeconds < 60){
             return "Nå";
         } else if (diffSeconds < 600){
-            return diffMinutes+' min';
+            return diffMinutes+" min";
         } else {
             return moment(departureTime).local().format("HH:mm");
         }
