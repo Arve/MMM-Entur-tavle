@@ -16,6 +16,13 @@ Module.register("MMM-Entur-tavle", {
     getScripts: function(){
         return [ "moment.js" ];
     },
+    getTranslations: function() {
+        return {
+            nb: "translations/nb.json",
+            nn: "translations/nn.json",
+            en: "translations/en.json"
+        };
+    },
 
     start: function(){
         var self = this;
@@ -68,7 +75,7 @@ Module.register("MMM-Entur-tavle", {
                 row.appendChild(this.getCell("&nbsp;"));
                 row.appendChild(this.getCell(journey.destinationDisplay.frontText));
                 row.appendChild(this.getCell("&nbsp;"));
-                row.appendChild(this.getCell(this.getTimeString(moment().local().toISOString(), journey.expectedDepartureTime), "align-right"));
+                row.appendChild(this.getCell(this.getDepartureTime(moment().local().toISOString(), journey.expectedDepartureTime), "align-right"));
                 table.appendChild(row);
             }
             wrapper.appendChild(table);
@@ -79,22 +86,23 @@ Module.register("MMM-Entur-tavle", {
     },
 
     socketNotificationReceived: function(message, payload){
-        if ((message === "DEPARTURE_LIST") && (payload.id === this.full_id)){
+        if ((message === "DEPARTURE_LIST") && (payload.id === this.fullId)){
             this.quayName = payload.name;
             this.journeys = payload.estimatedCalls;
             this.updateDom(this.config.updateSpeed);
         }
     },
 
-    getTimeString: function(queryTime, departureTime){
+    getDepartureTime: function(queryTime, departureTime){
         let diffSeconds = moment(departureTime).diff(queryTime, "seconds");
         let diffMinutes = moment(departureTime).diff(queryTime, "minutes");
         if (diffSeconds < 0) {
-            return "Gått";
+            return this.translate("departed");
         } else if (diffSeconds < 60){
-            return "Nå";
+            return this.translate("now");
         } else if (diffSeconds < 600){
-            return diffMinutes+" min";
+            let min = $this.translate("min");
+            return `${diffMinutes} ${min}`;
         } else {
             return moment(departureTime).local().format("HH:mm");
         }

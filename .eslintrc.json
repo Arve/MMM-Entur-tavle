@@ -1,6 +1,7 @@
 {
 	"rules": {
 		"indent": ["error", 4 ],
+		"eqeqeq": "error",		
 		"quotes": ["error", "double"],
 		"max-len": ["error", 250],
 		"curly": "error",
