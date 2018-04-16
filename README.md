@@ -14,17 +14,19 @@ Clone the repository
 
 Add the departure board to your configuration file, for instance:
 
-    {
-        module: "MMM-Entur-tavle",
-        position: "top_right",
-        config: {
-            stopId: '58366',
-            stopType: 'StopPlace'
-            numResults: 5,
-            showName: true,
-            highlightRealtime: true
-        }
-    },
+```js
+{
+    module: "MMM-Entur-tavle",
+    position: "top_right",
+    config: {
+        stopId: '58366',
+        stopType: 'StopPlace'
+        numResults: 5,
+        showName: true,
+        highlightRealtime: true
+    }
+},
+```
 
 ## Configuration
 
@@ -58,12 +60,14 @@ To get the specific quay, you will probably want to extract it from the GraphQL 
 
 Replace the numeric part of the stopPlace ID ( `NSR:StopPlace:56338` ) with your own stopPlace's numeric id and run the query.  In the right-hand window, you will have a number of departures from that stopPlace, and each of the results will have sections similar to the following:
 
-    "quay": {
-        "id": "NSR:Quay:7184"
-    },
-    "destinationDisplay": {
-        "frontText": "Vestli via Majorstuen"
-    },
+```js
+"quay": {
+    "id": "NSR:Quay:7184"
+},
+"destinationDisplay": {
+    "frontText": "Vestli via Majorstuen"
+},
+```
 
 … look for the quay number that corresponds to the frontText of the quay/platform you wish to display travels from.
 
