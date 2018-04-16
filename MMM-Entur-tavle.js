@@ -57,6 +57,7 @@ Module.register("MMM-Entur-tavle", {
 
     getDom: function(){
         let wrapper = document.createElement("div");
+        let className = this.config.size;
         wrapper.className = `align-left light bright ${this.config.size}`;
         if (this.journeys.length > 0){
             let table = document.createElement("table");
@@ -101,7 +102,7 @@ Module.register("MMM-Entur-tavle", {
         } else if (diffSeconds < 60){
             return this.translate("now");
         } else if (diffSeconds < 600){
-            let min = $this.translate("min");
+            let min = this.translate("min");
             return `${diffMinutes} ${min}`;
         } else {
             return moment(departureTime).local().format("HH:mm");
