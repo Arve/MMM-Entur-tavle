@@ -19,7 +19,7 @@ Add the departure board to your configuration file, for instance:
         position: "top_right",
         config: {
             stopId: '58366',
-            stopType: 'StopPlace'
+            stopType: 'StopPlace',
             numResults: 5,
             showName: true,
             highlightRealtime: true
