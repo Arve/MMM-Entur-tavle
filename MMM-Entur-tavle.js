@@ -10,7 +10,12 @@ Module.register("MMM-Entur-tavle", {
         showHeader: true,
         updateSpeed: 1000,
         size: "medium",
-        refresh: 30
+        refresh: 30,
+        showTransportMode: false
+    },
+
+    getStyles: function () {
+        return ["font-awesome.css"];
     },
 
     getScripts: function(){
@@ -71,6 +76,13 @@ Module.register("MMM-Entur-tavle", {
                 if (this.config.highlightRealtime && journey.realtime === true) {
                     row.className += " regular";
                 };
+                if (this.config.showTransportMode) {
+                    var icon = document.createElement("i");
+                    icon.className = this.getTransportIcon(journey.serviceJourney.journeyPattern.line.transportMode);
+                    icon.innerHTML = "&nbsp;";
+                    row.appendChild(icon);
+                    row.appendChild(this.getCell("&nbsp;"));
+                };
                 row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, "align-left"));
                 row.appendChild(this.getCell("&nbsp;"));
                 row.appendChild(this.getCell(journey.destinationDisplay.frontText));
@@ -93,6 +105,25 @@ Module.register("MMM-Entur-tavle", {
         }
     },
 
+    getTransportIcon: function (type){
+        switch (type) {
+            case "bus":
+                return "fa fa-bus";
+            case "bike":
+                return "fa fa-bicycle";
+            case "water":
+                return "fa fa-ship";
+            case "metro":
+                return "fa fa-subway";
+            case "rail":
+                return "fas fa-train";
+            case "tram":
+                return "fa fa-subway";
+            default:
+                return null
+        }
+    },
+
     getDepartureTime: function(queryTime, departureTime){
         let diffSeconds = moment(departureTime).diff(queryTime, "seconds");
         let diffMinutes = moment(departureTime).diff(queryTime, "minutes");
@@ -101,7 +132,7 @@ Module.register("MMM-Entur-tavle", {
         } else if (diffSeconds < 60){
             return this.translate("now");
         } else if (diffSeconds < 600){
-            let min = $this.translate("min");
+            let min = this.translate("min");
             return `${diffMinutes} ${min}`;
         } else {
             return moment(departureTime).local().format("HH:mm");
