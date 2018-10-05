@@ -40,6 +40,7 @@ Currently available configuration options are as follows:
 | updateSpeed | Integer.  The transition speed when updating the display | 1000 |
 | size | String.  One of "xsmall", "small", "medium", "large" or "xlarge" | "medium" |
 | refresh | Integer.  Seconds between board refresh | 30 |
+| showTransportMode | Boolean. Show the transporte mode as an icon. | false |
 
 ## Finding stopPlace
 
