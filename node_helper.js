@@ -59,7 +59,7 @@ module.exports = NodeHelper.create({
                 url: payload.url,
                 method: "POST",
                 headers: {
-                    "ETClientName": payload.ETClientName
+                    "ET-Client-Name": payload.ETClientName
                 },
                 json:{ query: this.prepareQuery(payload) },
             };
