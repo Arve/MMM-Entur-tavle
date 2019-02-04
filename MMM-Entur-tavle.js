@@ -1,6 +1,6 @@
 Module.register("MMM-Entur-tavle", {
     defaults: {
-        ETApiUrl: "https://api.entur.org/journeyplanner/2.0/index/graphql",
+        ETApiUrl: "https://api.entur.io/journey-planner/v2/graphql",
         ETClientName: "MMM-Entur-tavle",
         stopId: "12345",
         stopType: "StopPlace", // StopPlace or Quay - case sensitive.
@@ -11,7 +11,8 @@ Module.register("MMM-Entur-tavle", {
         updateSpeed: 1000,
         size: "medium",
         refresh: 30,
-        showTransportMode: false
+        showTransportMode: false,
+        timeOffset: [ 0, "seconds"]
     },
 
     getStyles: function () {
@@ -40,13 +41,15 @@ Module.register("MMM-Entur-tavle", {
     },
 
     getDepartures: function(){
+        startTime = moment().add(moment.duration(this.config.delay[0], this.config.delay[1]));
         const payload = {
             url: this.config.ETApiUrl,
             ETClientName: this.config.ETClientName,
             id: this.config.stopId,
             stopType: this.config.stopType,
             authorityId: this.config.authorityId,
-            numResults: this.config.numResults
+            numResults: this.config.numResults,
+            startTime: startTime.toISOString(),
         };
         this.sendSocketNotification("GET_DEPARTURES", payload);
     },

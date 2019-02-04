@@ -22,7 +22,9 @@ Add the departure board to your configuration file, for instance:
             stopType: 'StopPlace',
             numResults: 5,
             showName: true,
-            highlightRealtime: true
+            highlightRealtime: true,
+            timeOffset: [5, 'minutes']
+
         }
     },
 
@@ -41,6 +43,7 @@ Currently available configuration options are as follows:
 | size | String.  One of "xsmall", "small", "medium", "large" or "xlarge" | "medium" |
 | refresh | Integer.  Seconds between board refresh | 30 |
 | showTransportMode | Boolean. Show the transporte mode as an icon. | false |
+| timeOffset | Array(int, string). How much into the future to offset a query.  For instance, setting `[10, "minutes"] will only give responses 10 minutes from "now". The array provided must be valid _array_ syntax for [moment.duration()](https://momentjs.com/docs/#/durations/). | [0, 'seconds']
 
 ## Finding stopPlace
 

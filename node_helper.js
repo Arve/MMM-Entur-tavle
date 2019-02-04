@@ -15,16 +15,15 @@ module.exports = NodeHelper.create({
         let startTime = "";
         let queryInit = "";
         const fullId = this.getFullId(data.id, data.stopType, data.authorityId);
-        if (data.startDate) {
+        if (data.startTime) {
             let startTime = `startTime: "${data.startTime}", `;
-        };
-
+        }
         if (data.stopType === "StopPlace"){
             queryInit = `stopPlace(id: "${fullId}")`;
         } else if (data.stopType === "Quay"){
             queryInit = `quay (id: "${fullId}")`;
         };
-        return `{
+        let $query =  `{
                 ${queryInit} {
                 id
                 name
@@ -51,6 +50,7 @@ module.exports = NodeHelper.create({
                 }
               }
             }`;
+        return $query;
     },
 
     socketNotificationReceived: function(message, payload){
