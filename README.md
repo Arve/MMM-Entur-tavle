@@ -24,6 +24,7 @@ Add the departure board to your configuration file, for instance:
         numResults: 5,
         showName: true,
         highlightRealtime: true
+        timeOffset: [5, 'minutes']
     }
 },
 ```
@@ -42,6 +43,7 @@ Currently available configuration options are as follows:
 | updateSpeed | Integer.  The transition speed when updating the display | 1000 |
 | size | String.  One of "xsmall", "small", "medium", "large" or "xlarge" | "medium" |
 | refresh | Integer.  Seconds between board refresh | 30 |
+| timeOffset | Array(int, string). How much into the future to offset a query.  For instance, setting `[10, "minutes"] will only give responses 10 minutes from "now". The array provided must be valid _array_ syntax for [moment.duration()](https://momentjs.com/docs/#/durations/). | [0, 'seconds']
 
 ## Finding stopPlace
 

@@ -15,20 +15,19 @@ module.exports = NodeHelper.create({
         let startTime = "";
         let queryInit = "";
         const fullId = this.getFullId(data.id, data.stopType, data.authorityId);
-        if (data.startDate) {
-            let startTime = `startTime: "${data.startTime}", `;
+        if (data.startTime) {
+            startTime = `startTime: "${data.startTime}"`;
         };
-
         if (data.stopType === "StopPlace"){
             queryInit = `stopPlace(id: "${fullId}")`;
         } else if (data.stopType === "Quay"){
             queryInit = `quay (id: "${fullId}")`;
         };
-        return `{
+        query = `{
                 ${queryInit} {
                 id
                 name
-                estimatedCalls(${startTime} timeRange: 72100, numberOfDepartures: ${data.numResults}) {
+                estimatedCalls(${startTime} timeRange: 72100 numberOfDepartures: ${data.numResults}) {
                   aimedDepartureTime
                   expectedDepartureTime
                   actualDepartureTime
@@ -51,6 +50,7 @@ module.exports = NodeHelper.create({
                 }
               }
             }`;
+        return query;
     },
 
     socketNotificationReceived: function(message, payload){
