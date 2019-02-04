@@ -12,7 +12,8 @@ Module.register("MMM-Entur-tavle", {
         size: "medium",
         refresh: 30,
         showTransportMode: false,
-        timeOffset: [ 0, "seconds"]
+        timeOffset: [ 0, "seconds"],
+        exclusions: []
     },
 
     getStyles: function () {
@@ -75,6 +76,11 @@ Module.register("MMM-Entur-tavle", {
                 wrapper.appendChild(hrow);
             }
             for (const journey of this.journeys){
+                let exclusions = this.config.exclusions.map( (excl) => { return excl.toLowerCase(); } );
+                let publicCode = journey.serviceJourney.journeyPattern.line.publicCode;
+                if (exclusions.includes(publicCode.toLowerCase())){
+                    continue;
+                }
                 let row = document.createElement("tr");
                 if (this.config.highlightRealtime && journey.realtime === true) {
                     row.className += " regular";
@@ -86,7 +92,7 @@ Module.register("MMM-Entur-tavle", {
                     row.appendChild(icon);
                     row.appendChild(this.getCell("&nbsp;"));
                 };
-                row.appendChild(this.getCell(journey.serviceJourney.journeyPattern.line.publicCode, "align-left"));
+                row.appendChild(this.getCell(publicCode, "align-left"));
                 row.appendChild(this.getCell("&nbsp;"));
                 row.appendChild(this.getCell(journey.destinationDisplay.frontText));
                 row.appendChild(this.getCell("&nbsp;"));
@@ -123,7 +129,7 @@ Module.register("MMM-Entur-tavle", {
             case "tram":
                 return "fa fa-subway";
             default:
-                return null
+                return null;
         }
     },
 

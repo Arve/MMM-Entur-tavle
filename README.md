@@ -23,7 +23,8 @@ Add the departure board to your configuration file, for instance:
             numResults: 5,
             showName: true,
             highlightRealtime: true,
-            timeOffset: [5, 'minutes']
+            timeOffset: [5, 'minutes'],
+            exclusions: [ 'a1', 'a2, 'a3' ],
 
         }
     },
@@ -44,6 +45,7 @@ Currently available configuration options are as follows:
 | refresh | Integer.  Seconds between board refresh | 30 |
 | showTransportMode | Boolean. Show the transporte mode as an icon. | false |
 | timeOffset | Array(int, string). How much into the future to offset a query.  For instance, setting `[10, "minutes"] will only give responses 10 minutes from "now". The array provided must be valid _array_ syntax for [moment.duration()](https://momentjs.com/docs/#/durations/). | [0, 'seconds']
+| exclusions | Array(string).  Public codes to exclude from display. For instance, `exdclusions: [ 'a2', 'a4' ]` will exclude departures whose public code is 'a2' and 'a4'.  Note that this may mean that you get fewer results than those specified in the `numResults` config, so specifying this value may mean that you want to alter the numResults value until you get a satisfactory number of results. | []
 
 ## Finding stopPlace
 
