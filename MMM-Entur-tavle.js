@@ -14,7 +14,7 @@ Module.register("MMM-Entur-tavle", {
         showTransportMode: false,
         timeOffset: [ 0, "seconds"],
         exclusions: [],
-ti    },
+    },
 
     getStyles: function () {
         return ["font-awesome.css"];
