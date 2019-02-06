@@ -16,7 +16,7 @@ module.exports = NodeHelper.create({
         let queryInit = "";
         const fullId = this.getFullId(data.id, data.stopType, data.authorityId);
         if (data.startTime) {
-            let startTime = `startTime: "${data.startTime}", `;
+            startTime = `startTime: "${data.startTime}", `;
         }
         if (data.stopType === "StopPlace"){
             queryInit = `stopPlace(id: "${fullId}")`;
