@@ -13,7 +13,8 @@ Module.register("MMM-Entur-tavle", {
         refresh: 30,
         showTransportMode: false,
         timeOffset: [ 0, "seconds"],
-        exclusions: []
+        exclusions: [],
+        delay: [0, 'seconds'],
     },
 
     getStyles: function () {
