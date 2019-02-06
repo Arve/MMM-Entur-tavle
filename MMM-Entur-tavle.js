@@ -14,8 +14,7 @@ Module.register("MMM-Entur-tavle", {
         showTransportMode: false,
         timeOffset: [ 0, "seconds"],
         exclusions: [],
-        delay: [0, 'seconds'],
-    },
+ti    },
 
     getStyles: function () {
         return ["font-awesome.css"];
@@ -43,7 +42,7 @@ Module.register("MMM-Entur-tavle", {
     },
 
     getDepartures: function(){
-        startTime = moment().add(moment.duration(this.config.delay[0], this.config.delay[1]));
+        startTime = moment().add(moment.duration(this.config.timeOffset[0], this.config.timeOffset[1]));
         const payload = {
             url: this.config.ETApiUrl,
             ETClientName: this.config.ETClientName,

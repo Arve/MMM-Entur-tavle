@@ -23,7 +23,7 @@ Add the departure board to your configuration file, for instance:
             numResults: 5,
             showName: true,
             highlightRealtime: true,
-            timeOffset: [5, 'minutes'],
+            delay: [5, 'minutes'],
             exclusions: [ 'a1', 'a2, 'a3' ],
 
         }
