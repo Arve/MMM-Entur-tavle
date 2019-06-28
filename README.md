@@ -1,6 +1,6 @@
 # MMM-Entur-tavle
 
-<img src="./images/screenshot.png" align="right"> This is a departure board made for [MagicMirror²](https://magicmirror.builders/) using the [Entur API](https://www.entur.org/dev/api/).  The board can show the next departures for all public transport in Norway including any mode of transportation.
+<img src="./images/screenshot.png" align="right"> This is a departure board made for [MagicMirror²](https://magicmirror.builders/) using the [Entur API](https://developer.entur.org).  The board can show the next departures for all public transport in Norway including any mode of transportation.
 
 ## Installation
 
@@ -60,7 +60,7 @@ The simplest way to locate your stopPlace is to extract it from a query on the [
 
 In the Entur/Journeyplanner API, a `stopPlace` can be an area where there are multiple platforms and modes of transporation within a limited geographical area (or it could simply be different platforms on the same stop).  In the case where you want to query a specific quay/platform instead of an entire stopPlace, set the value of `stopType` to `Quay`.
 
-To get the specific quay, you will probably want to extract it from the GraphQL IDE.  You can use [this query](https://api.entur.org/doc/shamash-journeyplanner/?query=%7B%0A%20%20stopPlace(id%3A%20%22NSR%3AStopPlace%3A58366%22)%20%7B%0A%20%20%20%20id%0A%20%20%20%20name%0A%20%20%20%20estimatedCalls(timeRange%3A%2072100%2C%20numberOfDepartures%3A%2010)%20%7B%0A%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20id%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20serviceJourney%20%7B%0A%20%20%20%20%20%20%20%20journeyPattern%20%7B%0A%20%20%20%20%20%20%20%20%20%20line%20%7B%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20transportMode%0A%20%20%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D).
+To get the specific quay, you will probably want to extract it from the GraphQL IDE.  You can use [this query](https://api.entur.io/journey-planner/v2/ide/?query=%7B%0A%20%20stopPlace(id%3A%20%22NSR%3AStopPlace%3A58366%22)%20%7B%0A%20%20%20%20id%0A%20%20%20%20name%0A%20%20%20%20estimatedCalls(timeRange%3A%2072100%2C%20numberOfDepartures%3A%2010)%20%7B%0A%20%20%20%20%20%20quay%20%7B%0A%20%20%20%20%20%20%20%20id%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20destinationDisplay%20%7B%0A%20%20%20%20%20%20%20%20frontText%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20serviceJourney%20%7B%0A%20%20%20%20%20%20%20%20journeyPattern%20%7B%0A%20%20%20%20%20%20%20%20%20%20line%20%7B%20%20%0A%20%20%20%20%20%20%20%20%20%20%20%20transportMode%0A%20%20%20%20%20%20%20%20%20%20%20%20publicCode%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D).
 
 Replace the numeric part of the stopPlace ID ( `NSR:StopPlace:56338` ) with your own stopPlace's numeric id and run the query.  In the right-hand window, you will have a number of departures from that stopPlace, and each of the results will have sections similar to the following:
 
