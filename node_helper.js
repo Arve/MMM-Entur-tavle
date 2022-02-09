@@ -1,5 +1,7 @@
-let NodeHelper = require("node_helper");
-let request = require("request");
+/* eslint-disable prettier/prettier */
+const { response } = require("express");
+const fetch = require("node-fetch");
+const NodeHelper = require("node_helper");
 
 module.exports = NodeHelper.create({
 
@@ -53,23 +55,29 @@ module.exports = NodeHelper.create({
         return $query;
     },
 
-    socketNotificationReceived: function(message, payload){
+    socketNotificationReceived: async function(message, payload){
+        const body = this.prepareQuery(payload);
         if (message === "GET_DEPARTURES"){
-            let options = {
-                url: payload.url,
+            const options = {
                 method: "POST",
                 headers: {
+                    "Content-Type": "application/json",
                     "ET-Client-Name": payload.ETClientName
                 },
-                json:{ query: this.prepareQuery(payload) },
+                body: JSON.stringify({ query: body }),
             };
-            var self = this;
-            request.post(options, function(error, response, message){
-                if (!error && (response.statusCode === 200 || response.statusCode === 304)) {
-                    let path = (!!response.body.data.stopPlace)?response.body.data.stopPlace:response.body.data.quay;
-                    self.sendSocketNotification("DEPARTURE_LIST", path);
+            try {
+                const res = await fetch(payload.url, options);
+                if (res.status === 200 || res.status === 304) {
+                    const rb = await res.json();
+                    const path = !!rb.data.stopPlace ? rb.data.stopPlace : rb.data.quay;
+                    console.log(rb.data);
+                    this.sendSocketNotification("DEPARTURE_LIST", path);
                 }
-            });
+            } catch (e) {
+                ; // Really, do nothing. Errors may be intermittent
+            }
+
 
         }
     }
