@@ -21,10 +21,10 @@ Add the departure board to your configuration file, for instance:
             stopId: '58366',
             stopType: 'StopPlace',
             numResults: 5,
-            showName: true,
+            showHeader: true,
             highlightRealtime: true,
             delay: [5, 'minutes'],
-            exclusions: [ 'a1', 'a2, 'a3' ],
+            exclusions: [ 'a1', 'a2', 'a3' ],
 
         }
     },
