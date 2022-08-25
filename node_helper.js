@@ -25,11 +25,23 @@ module.exports = NodeHelper.create({
         } else if (data.stopType === "Quay"){
             queryInit = `quay (id: "${fullId}")`;
         };
+
+        let whitelist = data.whiteListedTransportModes;
+        if (whitelist.length !== 0){
+            whitelist = `[${whitelist}]`; // example format: whiteListedModes: [tram,metro]
+        } else {
+            whitelist = null;
+        }
+
         let $query =  `{
                 ${queryInit} {
                 id
                 name
-                estimatedCalls(${startTime} timeRange: 72100, numberOfDepartures: ${data.numResults}) {
+                estimatedCalls(${startTime}
+                    timeRange: 72100
+                    numberOfDepartures: ${data.numResults}
+                    whiteListedModes: ${whitelist}
+                    ) {
                   aimedDepartureTime
                   expectedDepartureTime
                   actualDepartureTime

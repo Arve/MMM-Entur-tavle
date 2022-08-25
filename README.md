@@ -46,6 +46,7 @@ Currently available configuration options are as follows:
 | showTransportMode | Boolean. Show the transporte mode as an icon. | false |
 | timeOffset | Array(int, string). How much into the future to offset a query.  For instance, setting `[10, "minutes"] will only give responses 10 minutes from "now". The array provided must be valid _array_ syntax for [moment.duration()](https://momentjs.com/docs/#/durations/). | [0, 'seconds']
 | exclusions | Array(string).  Public codes to exclude from display. For instance, `exclusions: [ 'a2', 'a4' ]` will exclude departures whose public code is 'a2' and 'a4'.  Note that this may mean that you get fewer results than those specified in the `numResults` config, so specifying this value may mean that you want to alter the numResults value until you get a satisfactory number of results. | []
+| whiteListedTransportModes | Array(string). If set will only display the given transport modes. For instance, `whiteListedTransportModes: [ 'tram', 'metro' ]` will only display trams and metros. Possible values are "bus", "rail", "metro", "pram", "coach".  numResults works as expected.   | []
 
 ## Finding stopPlace
 

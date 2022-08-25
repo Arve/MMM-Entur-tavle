@@ -14,6 +14,7 @@ Module.register("MMM-Entur-tavle", {
         showTransportMode: false,
         timeOffset: [ 0, "seconds"],
         exclusions: [],
+        whiteListedTransportModes: [],
     },
 
     getStyles: function () {
@@ -43,6 +44,7 @@ Module.register("MMM-Entur-tavle", {
 
     getDepartures: function(){
         startTime = moment().add(moment.duration(this.config.timeOffset[0], this.config.timeOffset[1]));
+
         const payload = {
             url: this.config.ETApiUrl,
             ETClientName: this.config.ETClientName,
@@ -50,6 +52,7 @@ Module.register("MMM-Entur-tavle", {
             stopType: this.config.stopType,
             authorityId: this.config.authorityId,
             numResults: this.config.numResults,
+            whiteListedTransportModes: this.config.whiteListedTransportModes,
             startTime: startTime.toISOString(),
         };
         this.sendSocketNotification("GET_DEPARTURES", payload);
