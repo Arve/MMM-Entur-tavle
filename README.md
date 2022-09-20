@@ -50,7 +50,21 @@ Currently available configuration options are as follows:
 
 ## Finding stopPlace
 
-The simplest way to locate your stopPlace is to extract it from a query on the [Entur web interface](https://en-tur.no/):
+There are two means to find a stop place
+
+## Using Entur's national Stop Place Registry
+
+1. Visit https://stoppested.entur.no
+2. Query for your desired stop place
+3. Once found, look for the stop place or quay ID in the search results.
+4. Stop places are listed as `NSR:StopPlace:[number]`, for instance `NSR:StopPlace:58366`
+5. Platforms/Quays are listed below, as `NSR:Quay:[number]`, for instance `NSR:Quay:7158`
+
+<img src="./images/stop-place-registry.png">
+
+## Using the Entur web interface
+
+You can alternatively locate your stopPlace or quay with a query on the [Entur web interface](https://en-tur.no/):
 
 1. Click on "Avgangstavle"
 2. Search for your stop and select it from the dropdown
