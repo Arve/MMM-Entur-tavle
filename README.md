@@ -32,7 +32,7 @@ Add the departure board to your configuration file, for instance:
 
 ## Configuration
 
-Currently available configuration options are as follows:
+Configuration options are as follows:
 
 | Option | Description | Default value |
 |-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
