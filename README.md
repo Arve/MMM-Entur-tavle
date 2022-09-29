@@ -6,11 +6,15 @@
 
 Enter your MagicMirror² module folder, e.g.:
 
+```bash
     cd ~/MagicMirror/modules
+```
 
 Clone the repository
 
+```bash
     git clone https://github.com/Arve/MMM-Entur-tavle.git
+```
 
 Add the departure board to your configuration file, for instance:
 
