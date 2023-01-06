@@ -1,7 +1,7 @@
 Module.register("MMM-Entur-tavle", {
     defaults: {
-        ETApiUrl: "https://api.entur.io/journey-planner/v2/graphql",
-        ETClientName: "MMM-Entur-tavle",
+        ETApiUrl: "https://api.entur.io/journey-planner/v3/graphql",
+        ETClientName: "MMM-Entur-tavle-v3api",
         stopId: "12345",
         stopType: "StopPlace", // StopPlace or Quay - case sensitive.
         numResults: 5,

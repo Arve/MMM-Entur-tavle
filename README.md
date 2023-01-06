@@ -2,6 +2,10 @@
 
 <img src="./images/screenshot.png" align="right"> This is a departure board made for [MagicMirror²](https://magicmirror.builders/) using the [Entur API](https://developer.entur.org).  The board can show the next departures for all public transport in Norway including any mode of transportation.
 
+## Emergency update notice
+
+Has your departure board recently stopped working?  Entur recently EOL-ed their old API, and old installations broke. Please update your installation of MMM-Entur-tavle.  
+
 ## Installation
 
 Enter your MagicMirror² module folder, e.g.:
