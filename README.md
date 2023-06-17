@@ -63,7 +63,7 @@ There are two means to find a stop place
 
 ## Using Entur's national Stop Place Registry
 
-1. Visit https://stoppested.entur.no
+1. Visit https://stoppested.entur.org
 2. Query for your desired stop place
 3. Once found, look for the stop place or quay ID in the search results.
 4. Stop places are listed as `NSR:StopPlace:[number]`, for instance `NSR:StopPlace:58366`
