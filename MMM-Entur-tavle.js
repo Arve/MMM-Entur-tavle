@@ -26,9 +26,9 @@ Module.register("MMM-Entur-tavle", {
     },
     getTranslations: function() {
         return {
+            en: "translations/en.json",
             nb: "translations/nb.json",
-            nn: "translations/nn.json",
-            en: "translations/en.json"
+            nn: "translations/nn.json"
         };
     },
 
