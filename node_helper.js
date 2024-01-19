@@ -1,54 +1,39 @@
-/* eslint-disable prettier/prettier */
-const { response } = require("express");
-
-let fetchPromise; // Use a promise to ensure proper initialization
-
-async function initializeFetch() {
-  try {
-    const nodeFetch = await import("node-fetch");
-    fetchPromise = Promise.resolve(nodeFetch.default);
-    console.log("fetch is initialized");
-  } catch (error) {
-    console.error("Error importing 'node-fetch':", error);
-  }
-}
-
-// Initialize fetch when the module is loaded
-initializeFetch();
-
+const Log = require("logger");
 const NodeHelper = require("node_helper");
 
 module.exports = NodeHelper.create({
 
-    start: function(){
-        console.log("Starting node helper for: " + this.name);
+    start() {
+        Log.log(`Starting node helper for: ${this.name}`);
     },
 
-    getFullId: function(id, type, authority){
+    getFullId(id, type, authority) {
         return `${authority}:${type}:${id}`;
     },
 
-    prepareQuery: function(data){
+    prepareQuery(data) {
         let startTime = "";
         let queryInit = "";
         const fullId = this.getFullId(data.id, data.stopType, data.authorityId);
         if (data.startTime) {
             startTime = `startTime: "${data.startTime}", `;
         }
-        if (data.stopType === "StopPlace"){
+        if (data.stopType === "StopPlace") {
             queryInit = `stopPlace(id: "${fullId}")`;
-        } else if (data.stopType === "Quay"){
+        }
+        else if (data.stopType === "Quay") {
             queryInit = `quay (id: "${fullId}")`;
-        };
+        }
 
         let whitelist = data.whiteListedTransportModes;
-        if (whitelist.length !== 0){
+        if (whitelist.length !== 0) {
             whitelist = `[${whitelist}]`; // example format: whiteListedModes: [tram,metro]
-        } else {
+        }
+        else {
             whitelist = null;
         }
 
-        let $query =  `{
+        const query = `{
                 ${queryInit} {
                 id
                 name
@@ -79,36 +64,36 @@ module.exports = NodeHelper.create({
                 }
               }
             }`;
-        return $query;
+        return query;
     },
 
-    socketNotificationReceived: async function(message, payload){
+    async socketNotificationReceived(message, payload) {
         try {
-            // Wait for fetch to be initialized
-            const fetch = await fetchPromise;
-
             const body = this.prepareQuery(payload);
-            if (message === "GET_DEPARTURES"){
+            if (message === "GET_DEPARTURES") {
                 const options = {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         "ET-Client-Name": payload.ETClientName
                     },
-                    body: JSON.stringify({ query: body }),
+                    body: JSON.stringify({ query: body })
                 };
-                console.log(fetch); // Check if 'fetch' is available
+
                 const res = await fetch(payload.url, options);
-                console.log("return code: " + res.status);
+                Log.debug(`return code: ${res.status}`);
                 if (res.status === 200 || res.status === 304) {
                     const rb = await res.json();
-                    const path = !!rb.data.stopPlace ? rb.data.stopPlace : rb.data.quay;
-                    console.log(rb.data);
+                    const path = rb.data.stopPlace
+                        ? rb.data.stopPlace
+                        : rb.data.quay;
+                    Log.debug(rb.data);
                     this.sendSocketNotification("DEPARTURE_LIST", path);
                 }
             }
-        } catch (e) {
-            console.log(e);
+        }
+        catch (error) {
+            Log.error(error);
             // Handle errors as needed
         }
     }

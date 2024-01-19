@@ -1,0 +1,29 @@
+{
+  "name": "mmm-entur-tavle",
+  "version": "1.0.0",
+  "description": "MagicMirror² Departure board for Entur.",
+  "main": "MMM-Entur-tavle.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arve/MMM-Entur-tavle.git"
+  },
+  "keywords": [
+    "MagicMirror",
+    "Entur",
+    "public transport"
+  ],
+  "author": "Arve",
+  "license": "LGPL-2.1-only",
+  "bugs": {
+    "url": "https://github.com/Arve/MMM-Entur-tavle/issues"
+  },
+  "homepage": "https://github.com/Arve/MMM-Entur-tavle#readme",
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.5.4",
+    "eslint": "^8.56.0"
+  }
+}

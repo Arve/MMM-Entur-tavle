@@ -1,19 +1,28 @@
 {
+	"extends": [
+		"eslint:recommended",
+		"plugin:@stylistic/recommended-extends"
+	],
+	"globals": {
+		"Module": "readonly",
+		"moment": "readonly"
+	},
 	"rules": {
-		"indent": ["error", 4 ],
+		"@stylistic/indent": ["error", 4 ],
 		"eqeqeq": "error",		
-		"quotes": ["error", "double"],
-		"max-len": ["error", 250],
+		"@stylistic/quotes": ["error", "double"],
+		"@stylistic/max-len": ["error", 250],
 		"curly": "error",
 		"camelcase": "error",
-		"no-trailing-spaces": ["error", {"ignoreComments": false }],
 		"no-irregular-whitespace": ["error"],
-		"semi": "error"
+		"@stylistic/comma-dangle": ["error", "never"],
+		"@stylistic/semi": ["error", "always"]
 	},
+	"root": true,
 	"env": {
 		"browser": true,
 		"node": true,
-		"es6": true
+		"es2024": true
 	},
 	"parserOptions": {
 		"sourceType": "module",
