@@ -12,19 +12,19 @@ Module.register("MMM-Entur-tavle", {
         size: "medium",
         refresh: 30,
         showTransportMode: false,
-        timeOffset: [ 0, "seconds"],
+        timeOffset: [0, "seconds"],
         exclusions: [],
-        whiteListedTransportModes: [],
+        whiteListedTransportModes: []
     },
 
-    getStyles: function () {
+    getStyles() {
         return ["font-awesome.css"];
     },
 
-    getScripts: function(){
-        return [ "moment.js" ];
+    getScripts() {
+        return ["moment.js"];
     },
-    getTranslations: function() {
+    getTranslations() {
         return {
             en: "translations/en.json",
             nb: "translations/nb.json",
@@ -32,18 +32,18 @@ Module.register("MMM-Entur-tavle", {
         };
     },
 
-    start: function(){
-        var self = this;
+    start() {
+        const self = this;
         this.fullId = `NSR:${this.config.stopType}:${this.config.stopId}`;
         this.journeys = [];
         this.getDepartures();
-        setInterval( function(){
+        setInterval(() => {
             self.getDepartures();
-        }, this.config.refresh*1000);
+        }, this.config.refresh * 1000);
     },
 
-    getDepartures: function(){
-        startTime = moment().add(moment.duration(this.config.timeOffset[0], this.config.timeOffset[1]));
+    getDepartures() {
+        const startTime = moment().add(moment.duration(this.config.timeOffset[0], this.config.timeOffset[1]));
 
         const payload = {
             url: this.config.ETApiUrl,
@@ -53,48 +53,48 @@ Module.register("MMM-Entur-tavle", {
             authorityId: this.config.authorityId,
             numResults: this.config.numResults,
             whiteListedTransportModes: this.config.whiteListedTransportModes,
-            startTime: startTime.toISOString(),
+            startTime: startTime.toISOString()
         };
         this.sendSocketNotification("GET_DEPARTURES", payload);
     },
 
-    getCell: function(cellText, className) {
-        let cell = document.createElement("td");
-        if (!!className) {
+    getCell(cellText, className) {
+        const cell = document.createElement("td");
+        if (className) {
             cell.className = className;
         }
         cell.innerHTML = cellText;
         return cell;
     },
 
-    getDom: function(){
-        let wrapper = document.createElement("div");
+    getDom() {
+        const wrapper = document.createElement("div");
         wrapper.className = `align-left light bright ${this.config.size}`;
-        if (this.journeys.length > 0){
-            let table = document.createElement("table");
-            if (this.config.showHeader){
-                let hrow = document.createElement("div");
+        if (this.journeys.length > 0) {
+            const table = document.createElement("table");
+            if (this.config.showHeader) {
+                const hrow = document.createElement("div");
                 hrow.className = "light small align-right";
                 hrow.innerHTML = this.quayName;
                 wrapper.appendChild(hrow);
             }
-            for (const journey of this.journeys){
-                let exclusions = this.config.exclusions.map( (excl) => { return excl.toLowerCase(); } );
-                let publicCode = journey.serviceJourney.journeyPattern.line.publicCode;
-                if (exclusions.includes(publicCode.toLowerCase())){
+            for (const journey of this.journeys) {
+                const exclusions = this.config.exclusions.map(excl => excl.toLowerCase());
+                const { publicCode } = journey.serviceJourney.journeyPattern.line;
+                if (exclusions.includes(publicCode.toLowerCase())) {
                     continue;
                 }
-                let row = document.createElement("tr");
+                const row = document.createElement("tr");
                 if (this.config.highlightRealtime && journey.realtime === true) {
                     row.className += " regular";
-                };
+                }
                 if (this.config.showTransportMode) {
-                    var icon = document.createElement("i");
+                    const icon = document.createElement("i");
                     icon.className = this.getTransportIcon(journey.serviceJourney.journeyPattern.line.transportMode);
                     icon.innerHTML = "&nbsp;";
                     row.appendChild(icon);
                     row.appendChild(this.getCell("&nbsp;"));
-                };
+                }
                 row.appendChild(this.getCell(publicCode, "align-left"));
                 row.appendChild(this.getCell("&nbsp;"));
                 row.appendChild(this.getCell(journey.destinationDisplay.frontText));
@@ -103,21 +103,22 @@ Module.register("MMM-Entur-tavle", {
                 table.appendChild(row);
             }
             wrapper.appendChild(table);
-        } else {
+        }
+        else {
             wrapper.innerHTML = this.translate("LOADING");
         }
         return wrapper;
     },
 
-    socketNotificationReceived: function(message, payload){
-        if ((message === "DEPARTURE_LIST") && (payload.id === this.fullId)){
+    socketNotificationReceived(message, payload) {
+        if (message === "DEPARTURE_LIST" && payload.id === this.fullId) {
             this.quayName = payload.name;
             this.journeys = payload.estimatedCalls;
             this.updateDom(this.config.updateSpeed);
         }
     },
 
-    getTransportIcon: function (type){
+    getTransportIcon(type) {
         switch (type) {
             case "bus":
                 return "fa fa-bus";
@@ -136,18 +137,20 @@ Module.register("MMM-Entur-tavle", {
         }
     },
 
-    getDepartureTime: function(queryTime, departureTime){
-        let diffSeconds = moment(departureTime).diff(queryTime, "seconds");
-        let diffMinutes = moment(departureTime).diff(queryTime, "minutes");
+    getDepartureTime(queryTime, departureTime) {
+        const diffSeconds = moment(departureTime).diff(queryTime, "seconds");
+        const diffMinutes = moment(departureTime).diff(queryTime, "minutes");
         if (diffSeconds < 0) {
             return this.translate("departed");
-        } else if (diffSeconds < 60){
-            return this.translate("now");
-        } else if (diffSeconds < 600){
-            let min = this.translate("min");
-            return `${diffMinutes} ${min}`;
-        } else {
-            return moment(departureTime).local().format("HH:mm");
         }
-    },
+        else if (diffSeconds < 60) {
+            return this.translate("now");
+        }
+        else if (diffSeconds < 600) {
+            const min = this.translate("min");
+            return `${diffMinutes} ${min}`;
+        }
+        return moment(departureTime).local()
+            .format("HH:mm");
+    }
 });
